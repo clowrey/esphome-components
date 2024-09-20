@@ -25,9 +25,21 @@ void AXS15231Touchscreen::setup() {
     delay(2);
   }
 
-  this->x_raw_max_ = this->display_->get_width();
-  this->y_raw_max_ = this->display_->get_height();
+  if (this->x_raw_max_ == this->x_raw_min_) {
+    this->x_raw_max_ = this->display_->get_native_width();
+  }
+  if (this->y_raw_max_ == this->y_raw_min_) {
+    this->y_raw_max_ = this->display_->get_native_height();
+  }
   ESP_LOGCONFIG(TAG, "AXS15231 Touchscreen setup complete");
+}
+
+void AXS15231Touchscreen::call_setup() {
+  if (this->display_ != nullptr) {
+      this->display_width_ = this->display_->get_width();
+      this->display_height_ = this->display_->get_height();
+  }
+  PollingComponent::call_setup();
 }
 
 void AXS15231Touchscreen::update_touches() {

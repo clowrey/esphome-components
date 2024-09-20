@@ -17,6 +17,7 @@ class AXS15231Touchscreen : public touchscreen::Touchscreen, public i2c::I2CDevi
     this->reset_pin_ = pin;
   }
 
+  void call_setup() override;
  protected:
   void update_touches() override;
 
