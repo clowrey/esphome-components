@@ -251,7 +251,7 @@ void AXS15231Display::set_madctl_() {
 void AXS15231Display::init_lcd_() {
   const axs15231b_lcd_init_cmd_t *lcd_init = vendor_specific_init_default;
   for (int i = 0; i < sizeof(vendor_specific_init_default) / sizeof(axs15231b_lcd_init_cmd_t); ++i) {
-    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].len);
+    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].data_bytes);
     if (lcd_init[i].delay_ms)
         delay(lcd_init[i].delay_ms);
   }
