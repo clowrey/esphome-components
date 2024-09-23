@@ -266,16 +266,22 @@ void AXS15231Display::init_lcd_() {
 }
 
 void AXS15231Display::reset_() {
-  if (this->reset_pin_  == nullptr) {
-    return;
+  if (this->reset_pin_  != nullptr) {
+    this->reset_pin_->digital_write(true);
+    delay(20);
+    this->reset_pin_->digital_write(false);
+    delay(20);
+    this->reset_pin_->digital_write(true);
+    delay(20);
+  } else {
+    //tx_param(axs15231b, io, AXS_LCD_SWRESET, NULL, 0);
+    //this->write_command_(AXS_LCD_CASET, buf, sizeof(buf));
+    this->write_command_(AXS_LCD_SWRESET, NULL, 0);
+    //vTaskDelay(pdMS_TO_TICKS(120)); // spec, wait at least 5m before sending new command
+    delay(120);
   }
 
-  this->reset_pin_->digital_write(true);
-  delay(20);
-  this->reset_pin_->digital_write(false);
-  delay(20);
-  this->reset_pin_->digital_write(true);
-  delay(20);
+
 }
 
 void AXS15231Display::write_command_(uint8_t cmd, const uint8_t *bytes, size_t len) {
