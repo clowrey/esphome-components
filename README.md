@@ -1,6 +1,6 @@
 # support for Guition JC3248W535EN 320x480 LCD dev board added by clowrey
 
-This change to the upstream repo adds the proper init code + software reset funcationality. The upstream repo for the T-Display S3 Long used reset pin function only since that device connects a GPIO to it. 
+These changes from the upstream repo(s) adds the proper init code + software reset funcationality. The upstream repo for the T-Display S3 Long used reset pin function only since that device connects a GPIO to it. 
 
 ![PXL_20240923_213721086 (Medium)](https://github.com/user-attachments/assets/e8b3d13c-4c6c-4bfd-ac90-49bb53507444)
 
