@@ -249,20 +249,20 @@ void AXS15231Display::set_madctl_() {
 }
 
 void AXS15231Display::init_lcd_() {
-  const axs15231b_lcd_init_cmd_t *lcd_init = vendor_specific_init_default;
-  for (int i = 0; i < sizeof(vendor_specific_init_default) / sizeof(axs15231b_lcd_init_cmd_t); ++i) {
-    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].data_bytes);
-    if (lcd_init[i].delay_ms)
-        delay(lcd_init[i].delay_ms);
-  }
-//  const lcd_cmd_t *lcd_init = AXS_QSPI_INIT_NEW;
-//  for (int i = 0; i < sizeof(AXS_QSPI_INIT_NEW) / sizeof(lcd_cmd_t); ++i) {
-//    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].len & 0x3f);
-//    if (lcd_init[i].len & 0x80)
-//        delay(150);
-//    if (lcd_init[i].len & 0x40)
-//        delay(20);
+//  const axs15231b_lcd_init_cmd_t *lcd_init = vendor_specific_init_default;
+//  for (int i = 0; i < sizeof(vendor_specific_init_default) / sizeof(axs15231b_lcd_init_cmd_t); ++i) {
+//    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].data_bytes);
+//    if (lcd_init[i].delay_ms)
+//        delay(lcd_init[i].delay_ms);
 //  }
+  const lcd_cmd_t *lcd_init = AXS_QSPI_INIT_NEW;
+  for (int i = 0; i < sizeof(AXS_QSPI_INIT_NEW) / sizeof(lcd_cmd_t); ++i) {
+    this->write_command_(lcd_init[i].cmd, (uint8_t *)lcd_init[i].data, lcd_init[i].len & 0x3f);
+    if (lcd_init[i].len & 0x80)
+        delay(150);
+    if (lcd_init[i].len & 0x40)
+        delay(20);
+  }
 }
 
 void AXS15231Display::reset_() {
@@ -314,14 +314,16 @@ void AXS15231Display::display_() {
   }
 
   // we will only update the changed rows to the display
-  size_t const w = this->x_high_ - this->x_low_ + 1;
-  size_t const h = this->y_high_ - this->y_low_ + 1;
+  size_t const w = this->width_; //this->x_high_ - this->x_low_ + 1;
+  size_t const h = this->height_; //this->y_high_ - this->y_low_ + 1;
   size_t const x_pad = this->get_width_internal() - w - this->x_low_;
-  this->set_addr_window_(this->x_low_, this->y_low_, this->x_high_, this->y_high_);
+  this->set_addr_window_(1, 1, this->width_, this->height_);
+//  this->set_addr_window_(this->x_low_, this->y_low_, this->x_high_, this->y_high_);
 
   this->enable();
 
-  if (this->x_low_ == 0 && this->y_low_ == 0 && x_pad == 0) {
+//  if (this->x_low_ == 0 && this->y_low_ == 0 && x_pad == 0) {
+  if (true) {
     this->write_cmd_addr_data(8, 0x32, 24, 0x2C00, this->buffer_, w * h * 2, 4);
   } else {
     this->write_cmd_addr_data(8, 0x32, 24, 0x2C00, nullptr, 0, 4);
